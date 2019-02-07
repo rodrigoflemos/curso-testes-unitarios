@@ -1,4 +1,4 @@
-package br.com.lemos.testesunitarios.servicos;
+package br.com.lemos.testesunitarios.tests;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import br.com.lemos.testesunitarios.exceptions.DivisaoPorZeroException;
+import br.com.lemos.testesunitarios.servicos.Calculadora;
 
 public class CalculadoraTest {
 	

@@ -1,4 +1,4 @@
-package br.com.lemos.testesunitarios.servicos;
+package br.com.lemos.testesunitarios.tests;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -19,6 +19,7 @@ import br.com.lemos.testesunitarios.entidades.Locacao;
 import br.com.lemos.testesunitarios.entidades.Usuario;
 import br.com.lemos.testesunitarios.exceptions.FilmeSemEstoqueException;
 import br.com.lemos.testesunitarios.exceptions.LocadoraException;
+import br.com.lemos.testesunitarios.servicos.LocacaoService;
 
 @RunWith(Parameterized.class)
 public class CalculoValorLocacaoTest {
@@ -71,10 +72,5 @@ public class CalculoValorLocacaoTest {
 		//verificacao
 		//4 + 4 + 3 + 2 + 1 = 14
 		assertThat(resultado.getValor(), is(valorLocacao));
-	}
-	
-	@Test
-	public void print() {
-		System.out.println(valorLocacao);
 	}
 }

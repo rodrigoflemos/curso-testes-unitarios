@@ -1,4 +1,4 @@
-package br.com.lemos.testesunitarios.servicos;
+package br.com.lemos.testesunitarios.tests;
 
 import org.junit.Assert;
 import org.junit.Test;

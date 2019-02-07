@@ -1,6 +1,8 @@
-package br.com.lemos.testesunitarios.servicos;
+package br.com.lemos.testesunitarios.tests;
 
-import static br.com.lemos.testesunitarios.matchers.MyMatchers.*;
+import static br.com.lemos.testesunitarios.matchers.MyMatchers.caiNumaSegunda;
+import static br.com.lemos.testesunitarios.matchers.MyMatchers.ehHoje;
+import static br.com.lemos.testesunitarios.matchers.MyMatchers.ehHojeComDiferencaDias;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -23,6 +25,7 @@ import br.com.lemos.testesunitarios.entidades.Locacao;
 import br.com.lemos.testesunitarios.entidades.Usuario;
 import br.com.lemos.testesunitarios.exceptions.FilmeSemEstoqueException;
 import br.com.lemos.testesunitarios.exceptions.LocadoraException;
+import br.com.lemos.testesunitarios.servicos.LocacaoService;
 import br.com.lemos.testesunitarios.utils.DataUtils;
 
 public class LocacaoServiceTest {
