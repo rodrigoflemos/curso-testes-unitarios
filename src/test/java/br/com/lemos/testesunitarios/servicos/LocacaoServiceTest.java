@@ -3,14 +3,16 @@ package br.com.lemos.testesunitarios.servicos;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -39,15 +41,16 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void testLocacao() throws Exception {
+	public void deveAlugarFilme() throws Exception {
 		
+		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		//cenario
 		
 		Usuario usuario = new Usuario("Rodrigo");
-		Filme filme = new Filme("Filme 1", 2, 5.00);
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 5.00));
 		
 		//acao
-		Locacao locacao = service.alugarFilme(usuario, filme);
+		Locacao locacao = service.alugarFilme(usuario, filmes);
 		
 		//verificacao
 		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
@@ -59,12 +62,13 @@ public class LocacaoServiceTest {
 	 * Metodo robusto para tratar excecao
 	 */
 	@Test
-	public void testLocacao_usuarioVazio() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeSemUsuario() throws FilmeSemEstoqueException {
 		
 		//cenario
-		Filme filme = new Filme("Filme 1", 2, 5.00);	
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 5.00));
+		
 		try {
-			service.alugarFilme(null, filme);
+			service.alugarFilme(null, filmes);
 			fail();
 		} catch (LocadoraException e) {
 			assertThat(e.getMessage(), is("Usuario vazio"));
@@ -75,7 +79,7 @@ public class LocacaoServiceTest {
 	 * Metodo novo para tratar excecao
 	 */
 	@Test
-	public void testLocacao_filmeVazio() throws FilmeSemEstoqueException, LocadoraException {
+	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
 		
 		//cenario
 		Usuario usuario = new Usuario("Rodrigo");
@@ -89,14 +93,17 @@ public class LocacaoServiceTest {
 	 * Metodo elegante para tratar excecao (Funciona quando voce precisa apenas da excecao
 	 */
 	@Test(expected=FilmeSemEstoqueException.class)
-	public void testeLocacao_filmeSemEstoque() throws Exception {
+	public void NaoDeveAlugarFilmeSemEstoque() throws Exception {
 		
 		//cenario
 		Usuario usuario = new Usuario("Rodrigo");
-		Filme filme = new Filme("Filme 1", 0, 5.00);
+		Filme filme1 = new Filme("Filme 1", 2, 5.00);
+		Filme filme2 = new Filme("Filme 2", 0, 9.00);
+		
+		List<Filme> filmes = Arrays.asList(filme1,filme2);
 		
 		//acao
-		service.alugarFilme(usuario, filme);
+		service.alugarFilme(usuario, filmes);
 	}
 	
 //	/*
@@ -135,4 +142,20 @@ public class LocacaoServiceTest {
 //		//acao
 //		service.alugarFilme(usuario, filme);
 //	}
+	
+	@Test
+	public void deveDevolverNaSegundaSeAlugarNoSabado() throws FilmeSemEstoqueException, LocadoraException {
+		
+		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		//cenario
+		Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1",3, 4.0), new Filme("Filme 2",2, 4.0));
+		
+		//acao
+		Locacao retorno = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
+		assertTrue(ehSegunda);
+	}
 }
